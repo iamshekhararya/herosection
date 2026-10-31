@@ -11,6 +11,10 @@ Built with **React 18 · TypeScript · Tailwind CSS · Vite**
 ![Tailwind](https://img.shields.io/badge/Tailwind_CSS-3-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)
 ![Vite](https://img.shields.io/badge/Vite-5-646CFF?style=for-the-badge&logo=vite&logoColor=white)
 
+### 🔗 [**Live Demo → heroshoes.netlify.app**](https://heroshoes.netlify.app/)
+
+[![Netlify Status](https://img.shields.io/badge/Deployed_on-Netlify-00C7B7?style=for-the-badge&logo=netlify&logoColor=white)](https://heroshoes.netlify.app/)
+
 </div>
 
 <!-- Add a screenshot or GIF here once you have one:
@@ -132,7 +136,7 @@ The blue and purple shoes and backgrounds included here are colour variants gene
 
 ## 🌐 Deployment
 
-The project is a static Vite app, so it deploys easily to **Vercel**, **Netlify** or **GitHub Pages**:
+The live demo is deployed on **Netlify**: [heroshoes.netlify.app](https://heroshoes.netlify.app/). The project is a static Vite app, so it also deploys easily to **Vercel** or **GitHub Pages**:
 
 - Build command: `npm run build`
 - Output directory: `dist`
