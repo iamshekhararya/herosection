@@ -1,6 +1,6 @@
 <div align="center">
 
-# 👟 Volterra Hero
+# 👟 shoes Hero
 
 ### An animated, fully responsive product hero section for a running-shoe brand
 
