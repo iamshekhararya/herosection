@@ -5,11 +5,10 @@ import { useReducedMotion } from "../hooks/useReducedMotion";
 interface Props {
   to: number;
   suffix?: string;
-  decimals?: number;
 }
 
 /** Counts up to `to` when scrolled into view (jumps straight there if motion is reduced). */
-export default function CountUp({ to, suffix = "", decimals = 0 }: Props) {
+export default function CountUp({ to, suffix = "" }: Props) {
   const reduced = useReducedMotion();
   const { ref, inView } = useInView<HTMLSpanElement>();
   const [val, setVal] = useState(reduced ? to : 0);
@@ -34,7 +33,7 @@ export default function CountUp({ to, suffix = "", decimals = 0 }: Props) {
 
   return (
     <span ref={ref}>
-      {val.toFixed(decimals)}
+      {Math.round(val)}
       {suffix}
     </span>
   );

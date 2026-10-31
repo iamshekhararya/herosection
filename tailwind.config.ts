@@ -42,6 +42,10 @@ export default {
           "0%, 100%": { transform: "translateY(0)" },
           "50%": { transform: "translateY(6px)" },
         },
+        marquee: {
+          from: { transform: "translateX(0)" },
+          to: { transform: "translateX(-50%)" },
+        },
       },
       animation: {
         float: "float 6s ease-in-out infinite",
@@ -50,6 +54,7 @@ export default {
         progress: "progress 7s linear both",
         drift: "drift 20s linear infinite both",
         bob: "bob 2.4s ease-in-out infinite",
+        marquee: "marquee 38s linear infinite",
       },
     },
   },
