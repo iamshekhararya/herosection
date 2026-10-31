@@ -69,6 +69,16 @@ export default function Hero({ cartCount = 2, onIndexChange }: HeroProps) {
   const next = useCallback(() => setIndex((i) => (i + 1) % COUNT), []);
   const prev = useCallback(() => setIndex((i) => (i - 1 + COUNT) % COUNT), []);
 
+  /* AUTO-CHANGE: a plain timer moves to the next shoe every AUTOPLAY_MS.
+     It restarts whenever the shoe changes (arrows, dots, swipe) or auto-play resumes. */
+  const [cycle, setCycle] = useState(0);
+  useEffect(() => {
+    if (paused) return;
+    setCycle((c) => c + 1); // restarts the progress bar in sync with the timer
+    const id = window.setTimeout(next, AUTOPLAY_MS);
+    return () => window.clearTimeout(id);
+  }, [index, paused, next]);
+
   /* start the slow background zoom after first paint */
   useEffect(() => {
     const id = requestAnimationFrame(() => setReady(true));
@@ -438,9 +448,8 @@ export default function Hero({ cartCount = 2, onIndexChange }: HeroProps) {
 
           <div className="h-1 flex-1 overflow-hidden rounded-full bg-white/25">
             <div
-              key={index}
-              onAnimationEnd={next}
-              className="h-full origin-left scale-x-0 rounded-full bg-[color:var(--accent)] motion-safe:animate-progress"
+              key={`${index}-${cycle}`}
+              className="hero-progress h-full origin-left rounded-full bg-[color:var(--accent)]"
               style={{
                 animationDuration: `${AUTOPLAY_MS}ms`,
                 animationPlayState: paused ? "paused" : "running",

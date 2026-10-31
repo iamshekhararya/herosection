@@ -31,3 +31,13 @@
     animation: none;
   }
 }
+
+/* progress bar under the hero shoe switcher (fills over the auto-play interval) */
+@keyframes hero-progress {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+.hero-progress {
+  transform: scaleX(0);
+  animation: hero-progress linear forwards;
+}
