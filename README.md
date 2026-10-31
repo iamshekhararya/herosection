@@ -1,6 +1,6 @@
 <div align="center">
 
-# 👟 shoes Hero
+# 👟 shoes Hero Section
 
 ### An animated, fully responsive product hero section for a running-shoe brand
 
