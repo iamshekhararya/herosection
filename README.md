@@ -33,7 +33,7 @@ Volterra Hero is a single-page landing hero where switching the shoe changes the
 - Click a thumbnail or colour dot
 - Use the arrow buttons or the keyboard Left / Right arrow keys
 - Swipe left / right on the shoe (touch screens)
-- Auto-play every 7 seconds, with a progress bar. It pauses while the mouse is over the shoe or the controls, and the pause button stops it for good
+- **Auto-change every 7 seconds** with a progress bar. A plain JavaScript timer drives it, so it works even when the OS has reduced motion turned on. It pauses while the mouse is over the shoe or the controls, and while the hero is scrolled out of view. The pause button stops it until you press play again, and any manual change restarts the countdown
 
 **Visual polish**
 - Smooth background cross-fade with a slow zoom
@@ -44,7 +44,7 @@ Volterra Hero is a single-page landing hero where switching the shoe changes the
 - Bundled Plus Jakarta Sans font (no external font requests)
 
 **Accessibility**
-- Respects `prefers-reduced-motion`
+- Respects `prefers-reduced-motion` for decorative animations (float, zoom, entrance effects)
 - Visible keyboard focus rings
 - ARIA labels and carousel semantics
 
@@ -87,13 +87,19 @@ volterra-hero/
 ├── tsconfig.json
 └── src/
     ├── main.tsx
-    ├── App.tsx
-    ├── index.css
+    ├── App.tsx               # holds the active colourway + cart count
+    ├── index.css             # base styles + hero progress-bar keyframes
     ├── components/
-    │   ├── Hero.tsx          # main hero section + all interaction logic
-    │   └── Particles.tsx     # floating light-dust effect
+    │   ├── Hero.tsx          # main hero section + all interaction logic + auto-change timer
+    │   ├── Particles.tsx     # floating light-dust effect
+    │   ├── Marquee.tsx, Shop.tsx, Technology.tsx, About.tsx,
+    │   │   Reviews.tsx, Faq.tsx, Contact.tsx, Footer.tsx,
+    │   │   StickyNav.tsx     # the rest of the home page
+    │   └── ...               # shared helpers (Section, Reveal, Buttons, icons)
+    ├── hooks/                # useInView, useScrollSpy, useTheme, ...
     ├── data/
-    │   └── variants.ts       # shoe colourways (images, colours, text)
+    │   ├── variants.ts       # shoe colourways (images, colours, text)
+    │   └── site.ts           # shop, tech, reviews, FAQ and footer content
     └── assets/
         ├── shoes/            # transparent WebP shoe images
         └── backgrounds/      # 16:9 background images
@@ -129,10 +135,12 @@ The blue and purple shoes and backgrounds included here are colour variants gene
 
 | What | Where |
 |---|---|
-| Auto-play speed | `AUTOPLAY_MS` at the top of `src/components/Hero.tsx` (also change `progress 7s` in `tailwind.config.ts`; the inline duration already follows `AUTOPLAY_MS`) |
+| Auto-change speed | `AUTOPLAY_MS` at the top of `src/components/Hero.tsx`. That is the only place to change: both the timer and the progress bar follow it (e.g. `4000` = 4 seconds) |
+| Turn auto-change off | Set the initial `userPaused` state to `true` in `Hero.tsx`, or remove the timer `useEffect` marked `AUTO-CHANGE` |
+| Progress bar look | `.hero-progress` and `@keyframes hero-progress` in `src/index.css` |
 | Particle count and motion | `src/components/Particles.tsx` |
-| Nav links and feature badges | `NAV_LINKS` and `FEATURES` in `src/components/Hero.tsx` |
-| Animations | `keyframes` and `animation` in `tailwind.config.ts` |
+| Nav links and feature badges | `navLinks` in `src/data/site.ts` and `FEATURES` in `src/components/Hero.tsx` |
+| Other animations | `keyframes` and `animation` in `tailwind.config.ts` |
 
 ## 🏠 Full home page
 
@@ -170,11 +178,26 @@ shop automatically. Add a matching entry to `products` in `site.ts` (same `id`).
 
 ### Changes to the hero
 
+- **Auto-change is now timer-based.** Previously the next shoe was triggered by the progress bar's CSS animation ending,
+  which silently never fired when the animation was disabled (for example, Windows with "Show animations" off). A
+  `setTimeout` now advances the shoe, and the progress bar uses its own `hero-progress` keyframes in `index.css`.
 - Nav links, "Shop Now", "Shop Collection" and "Scroll Down" now scroll to the sections.
 - The cart badge shows the live count (it starts at 2, as before).
 - Auto-play rests while the hero is scrolled out of view.
 - Left / Right arrow keys no longer switch the shoe while you type in a form field.
 - The hero's inner `<main>` became a `<div>` (the page now has a single `<main>` in `App.tsx`).
+
+## 🧯 Troubleshooting
+
+**`npm run build` fails with `has no exported member 'plans' / 'addons' / 'services' / 'steps'`**
+`tsc` type-checks every file in `src/`, even files nothing imports. `Options.tsx` and `Services.tsx` were leftovers from
+another project and expected data that `site.ts` does not have. They are not used by this page, so delete them
+(`src/components/Options.tsx`, `src/components/Services.tsx`, plus the unused `Navbar.tsx` and `data/scooters.ts`
+if you have them).
+
+**The shoe does not change by itself**
+Check that the pause button is not toggled on and that your mouse is not resting over the shoe or the controls.
+Auto-change also waits while the hero is scrolled out of view.
 
 ## 🌐 Deployment
 
